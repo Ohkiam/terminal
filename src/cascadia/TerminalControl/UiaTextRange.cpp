@@ -216,9 +216,17 @@ void UiaTextRange::_ChangeViewport(const SMALL_RECT NewWindow)
 void UiaTextRange::_TranslatePointToScreen(LPPOINT clientPoint) const
 {
     // TODO GitHub #2103: NON-HWND IMPLEMENTATION OF CLIENTTOSCREEN()
+    clientPoint->x;
+    clientPoint->y += 10;
 }
 
 void UiaTextRange::_TranslatePointFromScreen(LPPOINT screenPoint) const
 {
     // TODO GitHub #2103: NON-HWND IMPLEMENTATION OF SCREENTOCLIENT()
+}
+
+const COORD UiaTextRange::_getScreenFontSize() const
+{
+    auto provider = static_cast<ScreenInfoUiaProvider*>(_pProvider);
+    return provider->getFontSize();
 }

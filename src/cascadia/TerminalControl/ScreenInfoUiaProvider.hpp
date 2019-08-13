@@ -23,14 +23,9 @@ Author(s):
 #include "..\types\UiaTextRangeBase.hpp"
 #include "UiaTextRange.hpp"
 
-namespace Microsoft::Console::Render
+namespace winrt::Microsoft::Terminal::TerminalControl::implementation
 {
-    class IRenderData;
-}
-
-namespace Microsoft::Console::Types
-{
-    class WindowUiaProviderBase;
+    struct TermControl;
 }
 
 namespace Microsoft::Terminal
@@ -38,7 +33,7 @@ namespace Microsoft::Terminal
     class ScreenInfoUiaProvider : public Microsoft::Console::Types::ScreenInfoUiaProviderBase
     {
     public:
-        ScreenInfoUiaProvider(_In_ Microsoft::Console::Render::IRenderData* pData,
+        ScreenInfoUiaProvider(_In_ winrt::Microsoft::Terminal::TerminalControl::implementation::TermControl const& termControl,
                               _In_ std::function<RECT()> GetBoundingRect);
 
         // IRawElementProviderFragment methods
@@ -46,6 +41,8 @@ namespace Microsoft::Terminal
                                 _COM_Outptr_result_maybenull_ IRawElementProviderFragment** ppProvider) override;
         IFACEMETHODIMP get_BoundingRectangle(_Out_ UiaRect* pRect) override;
         IFACEMETHODIMP get_FragmentRoot(_COM_Outptr_result_maybenull_ IRawElementProviderFragmentRoot** ppProvider) override;
+
+        const COORD getFontSize() const;
 
     protected:
         std::deque<Microsoft::Console::Types::UiaTextRangeBase*> GetSelectionRangeUTRs(_In_ Microsoft::Console::Render::IRenderData* pData,
@@ -74,5 +71,6 @@ namespace Microsoft::Terminal
 
     private:
         std::function<RECT(void)> _getBoundingRect;
+        winrt::Microsoft::Terminal::TerminalControl::implementation::TermControl const& _termControl;
     };
 }
